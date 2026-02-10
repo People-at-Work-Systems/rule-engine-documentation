@@ -92,10 +92,11 @@ __Output Processing__
 
 ```java
 // Custom Apex Return type
-public class Result {
-    public String code;
-    public Decimal discount;
-    public Integer row_number;
+@JsonAccess(deserializable='always')
+global class Result {
+    global String code;
+    global Decimal discount;
+    global Integer row_number;
 }
 
 // Simple fluent API usage
