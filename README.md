@@ -151,4 +151,154 @@ Each matched line is represented by a JSON object inside the `output` array.
 
 ### Custom Integration
 
-tbd
+OpenAPI Spec:
+
+```yaml
+openapi: 3.0.0
+info:
+  title: Loyalforce Rules API
+  version: 1.0.0
+  description: API for evaluating business rules in both single and batch modes.
+
+paths:
+  /loyalforce_rules/api/evaluate:
+    post:
+      summary: Evaluate a single rule set
+      operationId: evaluateSingle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RuleEvaluationRequest'
+      responses:
+        '200':
+          description: Successful evaluation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RuleEvaluationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /loyalforce_rules/api/v1/rules/evaluate_batch:
+    post:
+      summary: Evaluate multiple rule sets in a batch
+      operationId: evaluateBatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/RuleEvaluationRequest'
+      responses:
+        '200':
+          description: Successful batch evaluation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RuleEvaluationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  responses:
+    BadRequest:
+      description: The request body is malformed or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequestResponse'
+    NotFound:
+      description: The specified rule or path was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundErrorResponse'
+
+  schemas:
+    RuleEvaluationRequest:
+      type: object
+      required:
+        - name
+        - input
+      properties:
+        name:
+          type: string
+          description: The name of the rule to be executed.
+          example: "DiscountCalculation"
+        path:
+          type: string
+          description: Optional logical path within the rule hierarchy. Defaults to "Root" if not provided.
+          default: "Root"
+          example: "Root/Account/Financial"
+        input:
+          type: object
+          description: Dynamic object containing input data for rule evaluation.
+          additionalProperties: true
+          example:
+            ShippingCountry: "France"
+            NumberOfEmployees: 350
+            AccountSource: "Newsletter"
+
+    RuleEvaluationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        executed:
+          type: object
+          properties:
+            path:
+              type: string
+              example: "Root/Account/Financial"
+            rules:
+              type: array
+              items:
+                type: string
+              example: ["DiscountCalculation"]
+        output:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+            example:
+              code: "foreign"
+              discount: 0.0
+              row_number: 2
+
+    NotFoundErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Not Found"
+        message:
+          type: string
+          example: "Rule >> DiscountCalculation << not found at path >> ['Root'] <<"
+
+    BadRequestResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          example: "Request body is not valid JSON"
+        status:
+          type: integer
+          example: 400
+        title:
+          type: string
+          example: "Bad Request"
+        type:
+          type: string
+          example: "about:blank"
+```
