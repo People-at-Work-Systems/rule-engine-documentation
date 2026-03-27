@@ -8,7 +8,12 @@ The PAW Rule Engine is a Business Rule Management System.
 After installing the package, you have to do the following steps:
 
 1. Assign the `Manage Rule Engine` permission set to anyone, who should be able to access the rule engine and access the connection settings.
-2. Add the Rule Engine URL to the Remote Site Settings under Setup > Security > Remote Site Settings.
+> __Note:__  
+> Anyone who wants to change the connection settings, needs the __Customize Application__ system permission additionally.
+
+> __Note:__  
+> The Rule Engine can also be accessed directly by using the URL provided to you.
+2. Add the Rule Engine URL to the Remote Site Settings under `Setup > Security > Remote Site Settings`.
 3. Create a Trusted URL under Setup > Security > Trusted URLs. Enter the URL, select `All` as CSP Context and check `frame-src` in the CSP Directives section.
 4. Provide the URL in the `Rule Engine App`s Settings Tab.
 5. Provide the API Key in the `Rule Engine App`s Settings Tab.
