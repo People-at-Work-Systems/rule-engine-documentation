@@ -2,6 +2,12 @@
 
 The Flow API offers several Apex Actions to execute Rules and parse the results. All Actions can be found in Flow Builder under `Apex Action > Rule Engine`.
 
+## Tutorial
+
+A Tutorial on how to use the Flow API can be accessed here:
+
+[Flow API Tutorial](FlowTutorial.md)
+
 ## Apex Defined Data Types
 
 ### Evaluation Input
